@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "197939301373",
+    "firebase_url": "https://thoitiet-7f6e4.firebaseio.com",
+    "project_id": "thoitiet-7f6e4",
+    "storage_bucket": "thoitiet-7f6e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197939301373:android:0504221b0a93c78b20a794",
+        "android_client_info": {
+          "package_name": "vangthao.app.thoitiet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197939301373-np405r8795tf7r001u182tt0nrt0ov9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDedgfXQhbUBIMAtOFEyLxBwnbV1P7skz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197939301373-np405r8795tf7r001u182tt0nrt0ov9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

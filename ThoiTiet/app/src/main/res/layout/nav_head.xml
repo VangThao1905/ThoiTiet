@@ -10,7 +10,7 @@
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_account" />
+        android:src="@drawable/ic_thoitiet150" />
 
     <TextView
         android:id="@+id/txtUsernameHeader"
@@ -30,7 +30,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Email"
+        android:text="No Email"
         android:textColor="#F44336" />
 
 </RelativeLayout>
