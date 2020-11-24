@@ -41,7 +41,7 @@ public class CityAdapter extends BaseAdapter {
     }
 
     private class ViewHolder{
-        TextView txtDistrictNameItem;
+        TextView txtCityNameItem;
     }
 
     @Override
@@ -51,12 +51,12 @@ public class CityAdapter extends BaseAdapter {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout,null);
-            holder.txtDistrictNameItem    = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
+            holder.txtCityNameItem    = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.txtDistrictNameItem.setText(cityList.get(position).getTitle());
+        holder.txtCityNameItem.setText(cityList.get(position).getTitle());
         return convertView;
     }
 }

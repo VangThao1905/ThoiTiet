@@ -307,14 +307,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             if (task.isSuccessful()) {
                                 LoadUser();
                                 String userName = "";
-                                Toast.makeText(HomeActivity.this, "size:" + mangUser.size(), Toast.LENGTH_SHORT).show();
+                                //get username
                                 for (int i = 0; i < mangUser.size(); i++) {
                                     if (mangUser.get(i).getEmail().equals(emailLogin)) {
                                         userName = mangUser.get(i).getUserName();
                                         break;
                                     }
                                 }
-                                Toast.makeText(HomeActivity.this, "User name:" + userName, Toast.LENGTH_SHORT).show();
+                                //keep user login state
                                 AddUserLogin(userName, emailLogin);
                                 txtUsernameHeader.setText(userName);
                                 txtEmailHeader.setText(emailLogin);
@@ -322,8 +322,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 menuItem_Login_Logout.setIcon(R.drawable.ic_logout);
                                 Toast.makeText(HomeActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                                 dialogLogin.dismiss();
+                            }else{
+                                Toast.makeText(HomeActivity.this, "Tai khoan hoac mat khau khong dung", Toast.LENGTH_SHORT).show();
                             }
                         }
+                        
+                        
                     });
         } else {
             Toast.makeText(this, "Vui lòng nhập đủ Tài khoản và Mật khẩu!", Toast.LENGTH_SHORT).show();

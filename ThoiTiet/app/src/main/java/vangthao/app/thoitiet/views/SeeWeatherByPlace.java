@@ -28,7 +28,7 @@ public class SeeWeatherByPlace extends AppCompatActivity {
     private ListView lvCity;
     private ArrayList<CityOnlyTitleAndSolrID> cityNameList;
     private CityAdapter adapterCity;
-    //List of 64 district of VietNam
+    //List of 64 city of VietNam
     City city;
 
     @Override
@@ -42,7 +42,7 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         cityNameList = new ArrayList<>();
         initView();
         initValue();
-        LoadDataDistrict();
+        LoadDataCity();
         adapterCity.notifyDataSetChanged();
         events();
         //Log.d("TEST",districtNameList.size()+"");
@@ -58,7 +58,7 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void LoadDataDistrict() {
+    public void LoadDataCity() {
         //Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
         CityService districtService = APICityUtils.getDataDistrict();
         Call<City> call = districtService.getCurrentCityData();
@@ -102,7 +102,7 @@ public class SeeWeatherByPlace extends AppCompatActivity {
     }
 
     private void initValue() {
-        adapterCity = new CityAdapter(SeeWeatherByPlace.this, R.layout.district_row, cityNameList);
+        adapterCity = new CityAdapter(SeeWeatherByPlace.this, R.layout.city_row, cityNameList);
         lvCity.setAdapter(adapterCity);
        // LoadDataDistrict();
     }

@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
 
     private View rootView;
     private TextView txtCountry;
+    private int idCity;
     private String cityName;
     private String countryCode = ",vn";
     private String units = "metric";
@@ -50,11 +51,23 @@ public class HomeFragment extends Fragment {
         if (cityName == null) {
             cityName = "Ha noi" + countryCode;
         } else {
-            cityName += countryCode;
+            //check in city have country code of not
+            if (haveCommasInCityName(cityName) == false) {
+                cityName += countryCode;
+            }
         }
         LoadDataWeather(cityName);
         events();
         return rootView;
+    }
+
+    public boolean haveCommasInCityName(String cityName) {
+        for (int i = 0; i < cityName.length(); i++) {
+            if (cityName.charAt(i) == ',') {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void events() {
@@ -65,8 +78,8 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
                 } else {
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(cityName, txtCityName.getText().toString(), HomeActivity.txtEmailHeader.getText().toString());
-                    databaseReference.child("DISTRICT_SAVED").push().setValue(citySaved, new DatabaseReference.CompletionListener() {
+                    CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, cityName, txtCityName.getText().toString(), HomeActivity.txtEmailHeader.getText().toString());
+                    databaseReference.child("CITY_SAVED").push().setValue(citySaved, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                             if (error == null) {
@@ -90,6 +103,7 @@ public class HomeFragment extends Fragment {
                 if (response.code() == 200) {
                     WeatherResponse weatherResponse = response.body();
                     if (weatherResponse != null) {
+                        idCity = weatherResponse.getId();
                         String countryName = weatherResponse.getSys().getCountry();
                         double temperature = Double.parseDouble(weatherResponse.getMain().getTemp().toString());
                         String minTemperature = weatherResponse.getMain().getTempMin().toString();

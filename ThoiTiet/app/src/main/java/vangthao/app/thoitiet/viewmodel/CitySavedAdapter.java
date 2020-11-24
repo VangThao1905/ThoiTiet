@@ -2,6 +2,7 @@ package vangthao.app.thoitiet.viewmodel;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,7 @@ public class CitySavedAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        TextView txtDistrictNameItem;
+        TextView txtCityNameItemSaved;
         ImageButton imgBtnDeletePlace;
     }
 
@@ -64,13 +65,23 @@ public class CitySavedAdapter extends BaseAdapter {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
-            holder.txtDistrictNameItem = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
+            holder.txtCityNameItemSaved = (TextView) convertView.findViewById(R.id.txtCityNameItemSaved);
             holder.imgBtnDeletePlace = (ImageButton) convertView.findViewById(R.id.imgBtnDeletePlace);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.txtDistrictNameItem.setText(cityList.get(position).getTitle());
+        holder.txtCityNameItemSaved.setText(cityList.get(position).getTitle());
+
+        holder.txtCityNameItemSaved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HomeActivity.class);
+                String cityName = cityList.get(position).getSolrID();
+                intent.putExtra("cityname", cityName);
+                context.startActivity(intent);
+            }
+        });
 
         holder.imgBtnDeletePlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,27 +92,26 @@ public class CitySavedAdapter extends BaseAdapter {
                 dialog.setCancelable(false);
                 Button btnYes = dialog.findViewById(R.id.btnYes_DeletePlace);
                 Button btnNo = dialog.findViewById(R.id.btnNo_DeletePlace);
-                //String email = HomeActivity.txtEmailHeader.getText().toString();
-                CityOnlyTitleAndSolrID_Sysn districtDelete = new CityOnlyTitleAndSolrID_Sysn(cityList.get(position).getSolrID(),cityList.get(position).getTitle(),cityList.get(position).getEmail());
+                CityOnlyTitleAndSolrID_Sysn cityDelete = new CityOnlyTitleAndSolrID_Sysn(cityList.get(position).getID(), cityList.get(position).getSolrID(), cityList.get(position).getTitle(), cityList.get(position).getEmail());
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "email:"+districtDelete.getEmail(), Toast.LENGTH_SHORT).show();
-                        Query query = PlacesManagement.myDatabase.child("DISTRICT_SAVED").orderByChild("email").equalTo(HomeActivity.txtEmailHeader.getText().toString());
+                        //Toast.makeText(context, "email:"+districtDelete.getEmail(), Toast.LENGTH_SHORT).show();
+                        Query query = PlacesManagement.myDatabase.child("CITY_SAVED").orderByChild("email").equalTo(HomeActivity.txtEmailHeader.getText().toString());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (districtDelete.getEmail() != null) {
                                     for (DataSnapshot phongSnapshot : dataSnapshot.getChildren()) {
-                                        phongSnapshot.getRef().getRef().removeValue();
-                                        Toast.makeText(context, "Xóa dia diem thanh cong!", Toast.LENGTH_SHORT).show();
-                                        PlacesManagement.adapterCitySaved.notifyDataSetChanged();
-                                        dialog.dismiss();
+                                        CityOnlyTitleAndSolrID_Sysn city = phongSnapshot.getValue(CityOnlyTitleAndSolrID_Sysn.class);
+                                        //Toast.makeText(context, cityDelete.getID() + "," + city.getID(), Toast.LENGTH_SHORT).show();
+                                        if (city.getID() == cityDelete.getID()) {
+                                            phongSnapshot.getRef().removeValue();
+                                            Toast.makeText(context, "Xoa dia diem thanh cong!", Toast.LENGTH_SHORT).show();
+                                            PlacesManagement.adapterCitySaved.notifyDataSetChanged();
+                                            dialog.dismiss();
+                                        }
                                     }
-                                }else{
-                                    //Toast.makeText(context , "Loi Xoa", Toast.LENGTH_SHORT).show();
-                                }
                             }
 
                             @Override
@@ -109,7 +119,6 @@ public class CitySavedAdapter extends BaseAdapter {
 
                             }
                         });
-                        //dialog.dismiss();
                     }
                 });
 

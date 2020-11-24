@@ -1,9 +1,25 @@
 package vangthao.app.thoitiet.model.places;
 
 public class CityOnlyTitleAndSolrID_Sysn {
+    private int ID;
     private String solrID;
     private String title;
     private String email;
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public CityOnlyTitleAndSolrID_Sysn(int ID, String solrID, String title, String email) {
+        this.ID = ID;
+        this.solrID = solrID;
+        this.title = title;
+        this.email = email;
+    }
 
     public CityOnlyTitleAndSolrID_Sysn(CityOnlyTitleAndSolrID_Sysn districtOnlyTitleAndSolrID_sys) {
     }
@@ -18,11 +34,6 @@ public class CityOnlyTitleAndSolrID_Sysn {
 
     public CityOnlyTitleAndSolrID_Sysn(){
 
-    }
-    public CityOnlyTitleAndSolrID_Sysn(String solrID, String title, String email) {
-        this.solrID = solrID;
-        this.title = title;
-        this.email = email;
     }
 
     public String getSolrID() {
