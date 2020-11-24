@@ -1,11 +1,11 @@
 package vangthao.app.thoitiet.model.places;
 
-public class DistrictOnlyTitleAndSolrID_Sys {
+public class CityOnlyTitleAndSolrID_Sysn {
     private String solrID;
     private String title;
     private String email;
 
-    public DistrictOnlyTitleAndSolrID_Sys(DistrictOnlyTitleAndSolrID_Sys districtOnlyTitleAndSolrID_sys) {
+    public CityOnlyTitleAndSolrID_Sysn(CityOnlyTitleAndSolrID_Sysn districtOnlyTitleAndSolrID_sys) {
     }
 
     public String getEmail() {
@@ -16,10 +16,10 @@ public class DistrictOnlyTitleAndSolrID_Sys {
         this.email = email;
     }
 
-    public DistrictOnlyTitleAndSolrID_Sys(){
+    public CityOnlyTitleAndSolrID_Sysn(){
 
     }
-    public DistrictOnlyTitleAndSolrID_Sys(String solrID, String title, String email) {
+    public CityOnlyTitleAndSolrID_Sysn(String solrID, String title, String email) {
         this.solrID = solrID;
         this.title = title;
         this.email = email;

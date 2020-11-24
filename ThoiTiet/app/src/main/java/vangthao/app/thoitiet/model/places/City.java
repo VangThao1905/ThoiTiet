@@ -1,10 +1,11 @@
 package vangthao.app.thoitiet.model.places;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class District {
+import java.util.List;
+
+public class City {
 
     @SerializedName("LtsItem")
     @Expose

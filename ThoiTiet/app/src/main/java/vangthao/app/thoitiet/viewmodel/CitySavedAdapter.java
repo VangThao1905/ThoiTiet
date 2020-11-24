@@ -15,34 +15,31 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.DistrictOnlyTitleAndSolrID;
-import vangthao.app.thoitiet.model.places.DistrictOnlyTitleAndSolrID_Sys;
+import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID_Sysn;
 import vangthao.app.thoitiet.views.HomeActivity;
 import vangthao.app.thoitiet.views.PlacesManagement;
 
-public class DistrictSavedAdapter extends BaseAdapter {
+public class CitySavedAdapter extends BaseAdapter {
 
     private PlacesManagement context;
     private int layout;
-    private ArrayList<DistrictOnlyTitleAndSolrID_Sys> districtList;
+    private ArrayList<CityOnlyTitleAndSolrID_Sysn> cityList;
 
-    public DistrictSavedAdapter(PlacesManagement context, int layout, ArrayList<DistrictOnlyTitleAndSolrID_Sys> districtList) {
+    public CitySavedAdapter(PlacesManagement context, int layout, ArrayList<CityOnlyTitleAndSolrID_Sysn> cityList) {
         this.context = context;
         this.layout = layout;
-        this.districtList = districtList;
+        this.cityList = cityList;
     }
 
     @Override
     public int getCount() {
-        return districtList.size();
+        return cityList.size();
     }
 
     @Override
@@ -73,7 +70,7 @@ public class DistrictSavedAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.txtDistrictNameItem.setText(districtList.get(position).getTitle());
+        holder.txtDistrictNameItem.setText(cityList.get(position).getTitle());
 
         holder.imgBtnDeletePlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +82,7 @@ public class DistrictSavedAdapter extends BaseAdapter {
                 Button btnYes = dialog.findViewById(R.id.btnYes_DeletePlace);
                 Button btnNo = dialog.findViewById(R.id.btnNo_DeletePlace);
                 //String email = HomeActivity.txtEmailHeader.getText().toString();
-                DistrictOnlyTitleAndSolrID_Sys districtDelete = new DistrictOnlyTitleAndSolrID_Sys(districtList.get(position).getSolrID(),districtList.get(position).getTitle(),districtList.get(position).getEmail());
+                CityOnlyTitleAndSolrID_Sysn districtDelete = new CityOnlyTitleAndSolrID_Sysn(cityList.get(position).getSolrID(),cityList.get(position).getTitle(),cityList.get(position).getEmail());
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -99,7 +96,7 @@ public class DistrictSavedAdapter extends BaseAdapter {
                                     for (DataSnapshot phongSnapshot : dataSnapshot.getChildren()) {
                                         phongSnapshot.getRef().getRef().removeValue();
                                         Toast.makeText(context, "Xóa dia diem thanh cong!", Toast.LENGTH_SHORT).show();
-                                        PlacesManagement.adapterDistrictSaved.notifyDataSetChanged();
+                                        PlacesManagement.adapterCitySaved.notifyDataSetChanged();
                                         dialog.dismiss();
                                     }
                                 }else{

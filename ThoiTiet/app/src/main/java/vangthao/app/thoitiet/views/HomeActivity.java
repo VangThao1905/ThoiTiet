@@ -36,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.SQLiteDatabasKeepLogin;
+import vangthao.app.thoitiet.model.userkeeploginstate.SQLiteDatabasKeepLogin;
 import vangthao.app.thoitiet.model.weatherdata.User;
 import vangthao.app.thoitiet.model.weatherdata.UserLogin;
 
