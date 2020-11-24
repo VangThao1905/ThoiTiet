@@ -11,7 +11,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,23 +35,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import vangthao.app.thoitiet.R;
 import vangthao.app.thoitiet.model.SQLiteDatabasKeepLogin;
-import vangthao.app.thoitiet.model.User;
-import vangthao.app.thoitiet.model.UserLogin;
-import vangthao.app.thoitiet.model.WeatherResponse;
-import vangthao.app.thoitiet.viewmodel.APIUtils;
-import vangthao.app.thoitiet.viewmodel.WeatherService;
+import vangthao.app.thoitiet.model.weatherdata.User;
+import vangthao.app.thoitiet.model.weatherdata.UserLogin;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private View headerView;
     private NavigationView navigationView;
-    private TextView txtUsernameHeader, txtEmailHeader, txtForgotPassWord, txtSignUp;
+    public static TextView txtUsernameHeader, txtEmailHeader, txtForgotPassWord, txtSignUp;
     private Menu menu;
     private MenuItem menuItem_Login_Logout;
     private Button btnLogin;
@@ -164,26 +157,36 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
     }
 
+    public void ResetDrawerHeader() {
+        GetDataUserLogin();
+        XoaUserLogin(mangUserLogin.get(0).getId());
+        mangUserLogin.clear();
+        txtUsernameHeader.setText("Guest");
+        txtEmailHeader.setText("No Email");
+        menuItem_Login_Logout.setTitle("Đăng nhập");
+        menuItem_Login_Logout.setIcon(R.drawable.ic_login);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_myaccount:
-                Toast.makeText(this, "tai khoan cua toi", Toast.LENGTH_SHORT).show();
+            case R.id.nav_see_weather_by_place:
+                Intent intentSeeWeatherByPlace = new Intent(HomeActivity.this, SeeWeatherByPlace.class);
+                startActivity(intentSeeWeatherByPlace);
                 break;
             case R.id.nav_placesmanagement:
-                Toast.makeText(this, "Quan ly dia diem", Toast.LENGTH_SHORT).show();
+                if (txtUsernameHeader.getText().equals("Guest") && txtEmailHeader.getText().equals("No Email")) {
+                    ShowDialogLogin();
+                } else {
+                    Intent intentPlacesManagement = new Intent(HomeActivity.this, PlacesManagement.class);
+                    startActivity(intentPlacesManagement);
+                }
                 break;
             case R.id.nav_login_out:
                 if (txtUsernameHeader.getText().equals("Guest") && txtEmailHeader.getText().equals("No Email")) {
                     ShowDialogLogin();
                 } else {
-                    GetDataUserLogin();
-                    XoaUserLogin(mangUserLogin.get(0).getId());
-                    mangUserLogin.clear();
-                    txtUsernameHeader.setText("Guest");
-                    txtEmailHeader.setText("No Email");
-                    menuItem_Login_Logout.setTitle("Đăng nhập");
-                    menuItem_Login_Logout.setIcon(R.drawable.ic_login);
+                    ResetDrawerHeader();
                 }
                 break;
         }

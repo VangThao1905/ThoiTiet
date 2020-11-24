@@ -22,20 +22,14 @@ public class RetrofitClient {
 
         //ho tro convert json tot hon
         Gson gson = new GsonBuilder().setLenient().create();
-        retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(builder)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
+        //if(retrofit != null){
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .client(builder)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+        //}
         return retrofit;
-//        if (retrofit == null) {
-//            retrofit = new Retrofit.Builder()
-//                    .baseUrl(baseUrl)
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build();
-//        }
-//        return retrofit;
     }
 
 }

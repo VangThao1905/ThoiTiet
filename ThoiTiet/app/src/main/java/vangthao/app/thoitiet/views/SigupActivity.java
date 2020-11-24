@@ -3,7 +3,6 @@ package vangthao.app.thoitiet.views;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.annotations.Nullable;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.User;
+import vangthao.app.thoitiet.model.weatherdata.User;
 
 public class SigupActivity extends AppCompatActivity {
 

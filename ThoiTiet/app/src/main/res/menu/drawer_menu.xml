@@ -4,24 +4,16 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_myaccount"
-            android:icon="@drawable/ic_myaccount"
-            android:title="Tài khoản của tôi">
-        </item>
+            android:id="@+id/nav_see_weather_by_place"
+            android:icon="@drawable/ic_placemanager"
+            android:title="Xem theo địa điểm"></item>
         <item
             android:id="@+id/nav_placesmanagement"
-            android:icon="@drawable/ic_placemanager"
-            android:title="Quản lý địa điểm">
-        </item>
+            android:icon="@drawable/ic_placesadded"
+            android:title="Quản lý địa điểm"></item>
+        <item
+            android:id="@+id/nav_login_out"
+            android:icon="@drawable/ic_login"
+            android:title="Đăng nhập"></item>
     </group>
-    <item android:title="">
-        <menu>
-            <item
-                android:id="@+id/nav_login_out"
-                android:icon="@drawable/ic_login"
-                android:title="Đăng nhập">
-            </item>
-        </menu>
-    </item>
-
 </menu>

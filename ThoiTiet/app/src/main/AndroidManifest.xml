@@ -22,6 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".views.PlacesManagement">
+
+        </activity>
+        <activity android:name=".views.SeeWeatherByPlace">
+
+        </activity>
     </application>
 
 </manifest>
