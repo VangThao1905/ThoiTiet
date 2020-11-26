@@ -10,24 +10,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.DistrictOnlyTitleAndSolrID;
+import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID;
 import vangthao.app.thoitiet.views.SeeWeatherByPlace;
 
-public class DistrictAdapter extends BaseAdapter {
+public class CityAdapter extends BaseAdapter {
 
     private SeeWeatherByPlace context;
     private int layout;
-    private ArrayList<DistrictOnlyTitleAndSolrID> districtList;
+    private ArrayList<CityOnlyTitleAndSolrID> cityList;
 
-    public DistrictAdapter(SeeWeatherByPlace context, int layout, ArrayList<DistrictOnlyTitleAndSolrID> districtList) {
+    public CityAdapter(SeeWeatherByPlace context, int layout, ArrayList<CityOnlyTitleAndSolrID> cityOnlyTitleAndSolrIDS) {
         this.context = context;
         this.layout = layout;
-        this.districtList = districtList;
+        this.cityList = cityOnlyTitleAndSolrIDS;
     }
 
     @Override
     public int getCount() {
-        return districtList.size();
+        return cityList.size();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DistrictAdapter extends BaseAdapter {
     }
 
     private class ViewHolder{
-        TextView txtDistrictNameItem;
+        TextView txtCityNameItem;
     }
 
     @Override
@@ -51,12 +51,12 @@ public class DistrictAdapter extends BaseAdapter {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout,null);
-            holder.txtDistrictNameItem    = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
+            holder.txtCityNameItem    = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.txtDistrictNameItem.setText(districtList.get(position).getTitle());
+        holder.txtCityNameItem.setText(cityList.get(position).getTitle());
         return convertView;
     }
 }
