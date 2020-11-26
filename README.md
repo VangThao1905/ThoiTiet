@@ -6,7 +6,7 @@ I. Functions
 2. Login
 3. Logout
 4. See weather by place(by city)
-5. Places management:See places saved, Delete places saved
+5. Places management: See places saved, Delete places saved
 
 II. Technologies
 1. Programming Language Used
@@ -16,7 +16,7 @@ II. Technologies
 3. API
   - Open Weather Map API
 4. Library
-  - Retrofit2, Firbase
+  - Retrofit2, Gson, Firbase
 
 III. Note
   - To run and test this application dev need no install Android Studio version 4.1 or higher.
