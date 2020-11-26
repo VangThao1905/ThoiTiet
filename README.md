@@ -9,8 +9,16 @@ I. Functions
 6. Places management
 
 II. Technologies
-1.Programming Language Used
-2.Database
-3.API
-4.Library
+1. Programming Language Used
+- Java
+2. Database
+- Firebase, SQLite
+3. API
+- Open Weather Map API
+4. Library
+- Retrofit2, Firbase
+
 III. Note
+- To run and test this application dev need no install Android Studio version 4.1 or higher.
+
+Thanks you see this repo.
