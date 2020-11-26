@@ -52,16 +52,16 @@
         app:layout_constraintTop_toBottomOf="@+id/edtEmailLogin" />
 
     <Button
+        android:background="@drawable/custom_button"
         android:textStyle="bold"
         android:padding="@dimen/_10sdp"
-        android:textColor="#FFFFFF"
+        android:textColor="#ffffff"
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:background="@drawable/custom_button"
         android:text="Đăng nhập"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

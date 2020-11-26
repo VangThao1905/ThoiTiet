@@ -197,7 +197,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void ShowDialogLogin() {
         final Dialog dialog = new Dialog(HomeActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_dang_nhap);
+        dialog.setContentView(R.layout.dialog_login);
         btnLogin = dialog.findViewById(R.id.btnLogin);
         txtSignUp = dialog.findViewById(R.id.txtSignUp);
         txtForgotPassWord = dialog.findViewById(R.id.txtForgotPassword);
