@@ -1,4 +1,4 @@
-package vangthao.app.thoitiet.model;
+package vangthao.app.thoitiet.model.userkeeploginstate;
 
 import android.content.Context;
 import android.database.Cursor;

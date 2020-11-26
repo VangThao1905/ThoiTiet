@@ -2,6 +2,7 @@ package vangthao.app.thoitiet.viewmodel;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,34 +16,31 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.DistrictOnlyTitleAndSolrID;
-import vangthao.app.thoitiet.model.places.DistrictOnlyTitleAndSolrID_Sys;
+import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID_Sysn;
 import vangthao.app.thoitiet.views.HomeActivity;
 import vangthao.app.thoitiet.views.PlacesManagement;
 
-public class DistrictSavedAdapter extends BaseAdapter {
+public class CitySavedAdapter extends BaseAdapter {
 
     private PlacesManagement context;
     private int layout;
-    private ArrayList<DistrictOnlyTitleAndSolrID_Sys> districtList;
+    private ArrayList<CityOnlyTitleAndSolrID_Sysn> cityList;
 
-    public DistrictSavedAdapter(PlacesManagement context, int layout, ArrayList<DistrictOnlyTitleAndSolrID_Sys> districtList) {
+    public CitySavedAdapter(PlacesManagement context, int layout, ArrayList<CityOnlyTitleAndSolrID_Sysn> cityList) {
         this.context = context;
         this.layout = layout;
-        this.districtList = districtList;
+        this.cityList = cityList;
     }
 
     @Override
     public int getCount() {
-        return districtList.size();
+        return cityList.size();
     }
 
     @Override
@@ -56,7 +54,7 @@ public class DistrictSavedAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        TextView txtDistrictNameItem;
+        TextView txtCityNameItemSaved;
         ImageButton imgBtnDeletePlace;
     }
 
@@ -67,13 +65,23 @@ public class DistrictSavedAdapter extends BaseAdapter {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, null);
-            holder.txtDistrictNameItem = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
+            holder.txtCityNameItemSaved = (TextView) convertView.findViewById(R.id.txtCityNameItemSaved);
             holder.imgBtnDeletePlace = (ImageButton) convertView.findViewById(R.id.imgBtnDeletePlace);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.txtDistrictNameItem.setText(districtList.get(position).getTitle());
+        holder.txtCityNameItemSaved.setText(cityList.get(position).getTitle());
+
+        holder.txtCityNameItemSaved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HomeActivity.class);
+                String cityName = cityList.get(position).getSolrID();
+                intent.putExtra("cityname", cityName);
+                context.startActivity(intent);
+            }
+        });
 
         holder.imgBtnDeletePlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,27 +92,26 @@ public class DistrictSavedAdapter extends BaseAdapter {
                 dialog.setCancelable(false);
                 Button btnYes = dialog.findViewById(R.id.btnYes_DeletePlace);
                 Button btnNo = dialog.findViewById(R.id.btnNo_DeletePlace);
-                //String email = HomeActivity.txtEmailHeader.getText().toString();
-                DistrictOnlyTitleAndSolrID_Sys districtDelete = new DistrictOnlyTitleAndSolrID_Sys(districtList.get(position).getSolrID(),districtList.get(position).getTitle(),districtList.get(position).getEmail());
+                CityOnlyTitleAndSolrID_Sysn cityDelete = new CityOnlyTitleAndSolrID_Sysn(cityList.get(position).getID(), cityList.get(position).getSolrID(), cityList.get(position).getTitle(), cityList.get(position).getEmail());
 
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "email:"+districtDelete.getEmail(), Toast.LENGTH_SHORT).show();
-                        Query query = PlacesManagement.myDatabase.child("DISTRICT_SAVED").orderByChild("email").equalTo(HomeActivity.txtEmailHeader.getText().toString());
+                        //Toast.makeText(context, "email:"+districtDelete.getEmail(), Toast.LENGTH_SHORT).show();
+                        Query query = PlacesManagement.myDatabase.child("CITY_SAVED").orderByChild("email").equalTo(HomeActivity.txtEmailHeader.getText().toString());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (districtDelete.getEmail() != null) {
                                     for (DataSnapshot phongSnapshot : dataSnapshot.getChildren()) {
-                                        phongSnapshot.getRef().getRef().removeValue();
-                                        Toast.makeText(context, "Xóa dia diem thanh cong!", Toast.LENGTH_SHORT).show();
-                                        PlacesManagement.adapterDistrictSaved.notifyDataSetChanged();
-                                        dialog.dismiss();
+                                        CityOnlyTitleAndSolrID_Sysn city = phongSnapshot.getValue(CityOnlyTitleAndSolrID_Sysn.class);
+                                        //Toast.makeText(context, cityDelete.getID() + "," + city.getID(), Toast.LENGTH_SHORT).show();
+                                        if (city.getID() == cityDelete.getID()) {
+                                            phongSnapshot.getRef().removeValue();
+                                            Toast.makeText(context, "Xoa dia diem thanh cong!", Toast.LENGTH_SHORT).show();
+                                            PlacesManagement.adapterCitySaved.notifyDataSetChanged();
+                                            dialog.dismiss();
+                                        }
                                     }
-                                }else{
-                                    //Toast.makeText(context , "Loi Xoa", Toast.LENGTH_SHORT).show();
-                                }
                             }
 
                             @Override
@@ -112,7 +119,6 @@ public class DistrictSavedAdapter extends BaseAdapter {
 
                             }
                         });
-                        //dialog.dismiss();
                     }
                 });
 

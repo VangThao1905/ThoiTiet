@@ -17,19 +17,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.District;
-import vangthao.app.thoitiet.model.places.DistrictOnlyTitleAndSolrID;
-import vangthao.app.thoitiet.viewmodel.APIDistrictUtils;
-import vangthao.app.thoitiet.viewmodel.DistrictAdapter;
-import vangthao.app.thoitiet.viewmodel.DistrictService;
+import vangthao.app.thoitiet.model.places.City;
+import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID;
+import vangthao.app.thoitiet.viewmodel.APICityUtils;
+import vangthao.app.thoitiet.viewmodel.CityAdapter;
+import vangthao.app.thoitiet.viewmodel.CityService;
 
 public class SeeWeatherByPlace extends AppCompatActivity {
 
-    private ListView lvDisttrict;
-    private ArrayList<DistrictOnlyTitleAndSolrID> districtNameList;
-    private DistrictAdapter adapterDistrict;
-    //List of 64 district of VietNam
-    District district;
+    private ListView lvCity;
+    private ArrayList<CityOnlyTitleAndSolrID> cityNameList;
+    private CityAdapter adapterCity;
+    //List of 64 city of VietNam
+    City city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +39,11 @@ public class SeeWeatherByPlace extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        districtNameList = new ArrayList<>();
+        cityNameList = new ArrayList<>();
         initView();
         initValue();
-        LoadDataDistrict();
-        adapterDistrict.notifyDataSetChanged();
+        LoadDataCity();
+        adapterCity.notifyDataSetChanged();
         events();
         //Log.d("TEST",districtNameList.size()+"");
     }
@@ -58,20 +58,20 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void LoadDataDistrict() {
+    public void LoadDataCity() {
         //Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
-        DistrictService districtService = APIDistrictUtils.getDataDistrict();
-        Call<District> call = districtService.getCurrentDistrictData();
-        call.enqueue(new Callback<District>() {
+        CityService districtService = APICityUtils.getDataDistrict();
+        Call<City> call = districtService.getCurrentCityData();
+        call.enqueue(new Callback<City>() {
             @Override
-            public void onResponse(Call<District> call, Response<District> response) {
+            public void onResponse(Call<City> call, Response<City> response) {
                 //Toast.makeText(PlacesManagement.this, "OK", Toast.LENGTH_SHORT).show();
                 if (response.code() == 200) {
-                    district = response.body();
-                    if (district != null) {
-                        for(int i = 0;i < district.getLtsItem().size();i++){
-                            districtNameList.add(new DistrictOnlyTitleAndSolrID(district.getLtsItem().get(i).getSolrID(),district.getLtsItem().get(i).getTitle()));
-                            adapterDistrict.notifyDataSetChanged();
+                    city = response.body();
+                    if (city != null) {
+                        for(int i = 0;i < city.getLtsItem().size();i++){
+                            cityNameList.add(new CityOnlyTitleAndSolrID(city.getLtsItem().get(i).getSolrID(),city.getLtsItem().get(i).getTitle()));
+                            adapterCity.notifyDataSetChanged();
                         }
                         //Toast.makeText(PlacesManagement.this, "Name:"+district.getLtsItem().get(0).getTitle(), Toast.LENGTH_SHORT).show();
                     }
@@ -79,19 +79,19 @@ public class SeeWeatherByPlace extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<District> call, Throwable t) {
+            public void onFailure(Call<City> call, Throwable t) {
                 Log.d("PlacesManagement",t.getMessage());
             }
         });
     }
 
     private void events() {
-        lvDisttrict.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(PlacesManagement.this, "Hello", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SeeWeatherByPlace.this,HomeActivity.class);
-                String cityName = districtNameList.get(position).getSolrID().replace("-"," ");
+                String cityName = cityNameList.get(position).getSolrID().replace("-"," ");
                 StringBuilder stringBuilder = new StringBuilder(cityName);
                 stringBuilder.deleteCharAt(0);
                 cityName = stringBuilder.toString();
@@ -102,12 +102,12 @@ public class SeeWeatherByPlace extends AppCompatActivity {
     }
 
     private void initValue() {
-        adapterDistrict = new DistrictAdapter(SeeWeatherByPlace.this, R.layout.district_row, districtNameList);
-        lvDisttrict.setAdapter(adapterDistrict);
+        adapterCity = new CityAdapter(SeeWeatherByPlace.this, R.layout.city_row, cityNameList);
+        lvCity.setAdapter(adapterCity);
        // LoadDataDistrict();
     }
 
     private void initView() {
-        lvDisttrict = findViewById(R.id.lvDistrict);
+        lvCity = findViewById(R.id.lvDistrict);
     }
 }

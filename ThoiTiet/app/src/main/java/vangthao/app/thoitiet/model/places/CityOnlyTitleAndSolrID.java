@@ -1,6 +1,6 @@
 package vangthao.app.thoitiet.model.places;
 
-public class DistrictOnlyTitleAndSolrID {
+public class CityOnlyTitleAndSolrID {
     private String solrID;
     private String title;
 
@@ -20,7 +20,7 @@ public class DistrictOnlyTitleAndSolrID {
         this.title = title;
     }
 
-    public DistrictOnlyTitleAndSolrID(String solrID, String title) {
+    public CityOnlyTitleAndSolrID(String solrID, String title) {
         this.solrID = solrID;
         this.title = title;
     }
