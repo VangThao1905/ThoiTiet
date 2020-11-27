@@ -19,6 +19,6 @@ II. Technologies
   - Retrofit2, Gson, Firbase
 
 III. Note
-  - To run and test this application dev need no install Android Studio version 4.1 or higher.
+  - To run and test this application dev need install Android Studio version 4.1 or higher.
 
 Thanks you see this repo.
