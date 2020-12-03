@@ -45,7 +45,7 @@
         android:layout_below="@+id/txtTemperature"
         android:layout_margin="@dimen/_8sdp"
         android:gravity="center"
-        android:text="Nhiet do thap nhat:"
+        android:text="Nhiệt độ thấp nhất:"
         android:textColor="#000000" />
 
     <TextView
@@ -53,9 +53,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtMinTemperature"
-        android:layout_margin="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:gravity="center"
-        android:text="Nhiet do cao nhat:"
+        android:text="Nhiệt độ cao nhất:"
         android:textColor="#000000" />
 
     <TextView

@@ -1,15 +1,15 @@
 package vangthao.app.thoitiet.model.places;
 
 public class CityOnlyTitleAndSolrID {
-    private String solrID;
+    private String solrId;
     private String title;
 
-    public String getSolrID() {
-        return solrID;
+    public String getSolrId() {
+        return solrId;
     }
 
-    public void setSolrID(String solrID) {
-        this.solrID = solrID;
+    public void setSolrID(String solrId) {
+        this.solrId = solrId;
     }
 
     public String getTitle() {
@@ -20,8 +20,8 @@ public class CityOnlyTitleAndSolrID {
         this.title = title;
     }
 
-    public CityOnlyTitleAndSolrID(String solrID, String title) {
-        this.solrID = solrID;
+    public CityOnlyTitleAndSolrID(String solrId, String title) {
+        this.solrId = solrId;
         this.title = title;
     }
 }
