@@ -13,12 +13,12 @@ public class SQLiteDatabasKeepLogin extends SQLiteOpenHelper {
     }
 
     //truy van khong can tra ve ket qua
-    public void QueryData(String sql){
+    public void queryData(String sql){
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL(sql);
     }
     //truy vấn có trả kết quả:SELECT
-    public Cursor GetData(String sql){
+    public Cursor getData(String sql){
         SQLiteDatabase database = getReadableDatabase();
         return database.rawQuery(sql,null);
     }

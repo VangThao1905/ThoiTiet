@@ -58,14 +58,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_home);
         setTitle("Trang chủ");
 
-        initView();
+        loadViews();
         initValue();
-        events();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
             setTitle("Trang chủ");
-
         }
     }
 
@@ -81,14 +79,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         userArrayList = new ArrayList<>();
 
         //load data user
-        LoadUser();
+        loadUser();
 
         //create databse keep user login
         keepUserLogin = new SQLiteDatabasKeepLogin(this, "user_login.sqlite", null, 1);
         //create table UserLogin
-        keepUserLogin.QueryData("CREATE TABLE IF NOT EXISTS UserLogin(Id INTEGER PRIMARY KEY AUTOINCREMENT,UserName VARCHAR(200),Email VARCHAR(200))");
+        keepUserLogin.queryData("CREATE TABLE IF NOT EXISTS UserLogin(Id INTEGER PRIMARY KEY AUTOINCREMENT,UserName VARCHAR(200),Email VARCHAR(200))");
 
-        GetDataUserLogin();
+        getDataUserLogin();
 
         //setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -117,21 +115,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void AddUserLogin(String username, String email) {
+    private void addUserLogin(String username, String email) {
         if (!username.equals("") && !email.equals("")) {
             //insert data
-            keepUserLogin.QueryData("INSERT INTO UserLogin VALUES(1,'" + username + "','" + email + "')");
+            keepUserLogin.queryData("INSERT INTO UserLogin VALUES(1,'" + username + "','" + email + "')");
         }
     }
 
-    private void XoaUserLogin(final int id) {
-        keepUserLogin.QueryData("DELETE FROM UserLogin WHERE Id = '" + id + "'");
+    private void xoaUserLogin(final int id) {
+        keepUserLogin.queryData("DELETE FROM UserLogin WHERE Id = '" + id + "'");
         userLoginArrayList.clear();
     }
 
-    private void GetDataUserLogin() {
+    private void getDataUserLogin() {
         //select data
-        Cursor dataCongViec = keepUserLogin.GetData("SELECT * FROM UserLogin");
+        Cursor dataCongViec = keepUserLogin.getData("SELECT * FROM UserLogin");
         userLoginArrayList.clear();
         while (dataCongViec.moveToNext()) {
             int id = dataCongViec.getInt(0);
@@ -141,19 +139,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void events() {
-
-    }
-
-    private void initView() {
+    private void loadViews() {
         toolbar = findViewById(R.id.toolBar);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
     }
 
-    public void ResetDrawerHeader() {
-        GetDataUserLogin();
-        XoaUserLogin(userLoginArrayList.get(0).getId());
+    public void resetDrawerHeader() {
+        getDataUserLogin();
+        xoaUserLogin(userLoginArrayList.get(0).getId());
         userLoginArrayList.clear();
         txtUsernameHeader.setText(R.string.guest);
         txtEmailHeader.setText(R.string.no_email);
@@ -171,7 +165,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_placesmanagement:
                 if (txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
-                    ShowDialogLogin();
+                    showDialogLogin();
                 } else {
                     Intent intentPlacesManagement = new Intent(HomeActivity.this, PlacesManagement.class);
                     startActivity(intentPlacesManagement);
@@ -179,9 +173,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_login_out:
                 if (txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
-                    ShowDialogLogin();
+                    showDialogLogin();
                 } else {
-                    ResetDrawerHeader();
+                    resetDrawerHeader();
                 }
                 break;
         }
@@ -189,7 +183,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void ShowDialogLogin() {
+    public void showDialogLogin() {
         final Dialog dialog = new Dialog(HomeActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_login);
@@ -233,8 +227,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
         btnLogin.setOnClickListener((View view) -> {
-            LoadUser();
-            Login();
+            loadUser();
+            login();
         });
 
         txtSignUp.setOnClickListener(view -> {
@@ -245,7 +239,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         dialog.show();
     }
 
-    private void LoadUser() {
+    private void loadUser() {
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myData = myDatabase.child("USER");
         myData.addValueEventListener(new ValueEventListener() {
@@ -266,7 +260,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void Login() {
+    private void login() {
         emailLogin = edtEmailLogin.getText().toString();
         String passwordLogin = edtPasswordLogin.getText().toString();
 
@@ -275,7 +269,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             myAuth.signInWithEmailAndPassword(emailLogin, passwordLogin)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
-                            LoadUser();
+                            loadUser();
                             String userName = "";
                             //get username
                             for (int i = 0; i < userArrayList.size(); i++) {
@@ -285,7 +279,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                 }
                             }
                             //keep user login state
-                            AddUserLogin(userName, emailLogin);
+                            addUserLogin(userName, emailLogin);
                             txtUsernameHeader.setText(userName);
                             txtEmailHeader.setText(emailLogin);
                             menuItem_Login_Logout.setTitle(R.string.logout);

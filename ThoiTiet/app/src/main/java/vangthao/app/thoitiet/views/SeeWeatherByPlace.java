@@ -41,11 +41,11 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         cityNameList = new ArrayList<>();
-        initView();
+        loadViews();
         initValue();
-        LoadDataCity();
+        loadDataCity();
         adapterCity.notifyDataSetChanged();
-        events();
+        loadEventList();
     }
 
     @Override
@@ -57,8 +57,8 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void LoadDataCity() {
-        CityService districtService = APICityUtils.getDataDistrict();
+    public void loadDataCity() {
+        CityService districtService = APICityUtils.getDataCity();
         Call<City> call = districtService.getCurrentCityData();
         call.enqueue(new Callback<City>() {
             @Override
@@ -81,7 +81,7 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         });
     }
 
-    private void events() {
+    private void loadEventList() {
         lvCity.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             Intent intent = new Intent(SeeWeatherByPlace.this, HomeActivity.class);
             String cityName = cityNameList.get(position).getSolrId().replace("-", " ");
@@ -99,7 +99,7 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         // LoadDataDistrict();
     }
 
-    private void initView() {
+    private void loadViews() {
         lvCity = findViewById(R.id.lvDistrict);
     }
 }

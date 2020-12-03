@@ -32,21 +32,21 @@ public class SigupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sigup);
 
-        initView();
+        loadViews();
         intitValue();
-        events();
+        loadEventList();
 
     }
 
-    private void events() {
+    private void loadEventList() {
         txtHaveAccount.setOnClickListener(v -> finish());
 
-        btnSigup.setOnClickListener(v -> Sigup());
+        btnSigup.setOnClickListener(v -> sigup());
 
         btnCancleSigup.setOnClickListener(v -> finish());
     }
 
-    private void Sigup() {
+    private void sigup() {
         userName = edtUsernameSigup.getText().toString();
         email = edtEmailSigup.getText().toString();
         password = edtPasswordSigup.getText().toString();
@@ -54,8 +54,7 @@ public class SigupActivity extends AppCompatActivity {
 
         if (!userName.equals("") && !email.equals("") && !password.equals("") && !retypePassword.equals("")) {
             if (retypePassword.equals(password)) {
-                //Toast.makeText(this, ""+userName + ","+passWord, Toast.LENGTH_SHORT).show();
-                AddUser();
+                addUser();
             } else {
                 Toast.makeText(SigupActivity.this, "Mật khẩu và Nhập lại mật khẩu không khớp!", Toast.LENGTH_SHORT).show();
             }
@@ -65,8 +64,7 @@ public class SigupActivity extends AppCompatActivity {
 
     }
 
-    private void AddUser() {
-        //Toast.makeText(this, "This is function AddUser", Toast.LENGTH_SHORT).show();
+    private void addUser() {
         myAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -95,7 +93,7 @@ public class SigupActivity extends AppCompatActivity {
         myAuth = FirebaseAuth.getInstance();
     }
 
-    private void initView() {
+    private void loadViews() {
         edtUsernameSigup = findViewById(R.id.edtUsernameSigup);
         edtEmailSigup = findViewById(R.id.edtEmailSigup);
         edtPasswordSigup = findViewById(R.id.edtPasswordSigup);
