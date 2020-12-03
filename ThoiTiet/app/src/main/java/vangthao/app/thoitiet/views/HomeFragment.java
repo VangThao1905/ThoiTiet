@@ -52,13 +52,12 @@ public class HomeFragment extends Fragment {
         if (cityName == null) {
             cityName = "Ha noi" + countryCode;
         } else {
-            //check in city have country code of not
             if (!haveCommasInCityName(cityName)) {
                 cityName += countryCode;
             }
         }
-        LoadDataWeather(cityName);
-        events();
+        loadDataWeather(cityName);
+        loadEventList();
         return rootView;
     }
 
@@ -71,7 +70,7 @@ public class HomeFragment extends Fragment {
         return false;
     }
 
-    private void events() {
+    private void loadEventList() {
         imgSavePlace.setOnClickListener(v -> {
             if (HomeActivity.txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && HomeActivity.txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
                 Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
@@ -89,7 +88,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void LoadDataWeather(String cityName) {
+    public void loadDataWeather(String cityName) {
         WeatherService weatherService = APIWeatherUtils.getDataWeather();
         String units = "metric";
         String appId = "ae89bb1e7f56dc6ad44c4731c8154d7b";
@@ -109,7 +108,6 @@ public class HomeFragment extends Fragment {
                         String cityNameResponse = weatherResponse.getName();
 
                         int temperatureFinal = (int) temperature;
-                        //set background
                         customIconWeather(temperatureFinal);
 
                         txtCountry.setText(R.string.contry + ": " + countryName);

@@ -35,9 +35,9 @@ public class PlacesManagement extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         cityNameListSaved = new ArrayList<>();
-        initView();
+        loadViews();
         initValue();
-        LoadDataCitySaved();
+        loadDataCitySaved();
         adapterCitySaved.notifyDataSetChanged();
     }
 
@@ -50,7 +50,7 @@ public class PlacesManagement extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void LoadDataCitySaved() {
+    public void loadDataCitySaved() {
 
         DatabaseReference myData = myDatabase.child("CITY_SAVED");
         myData.addValueEventListener(new ValueEventListener() {
@@ -80,7 +80,7 @@ public class PlacesManagement extends AppCompatActivity {
         // LoadDataDistrict();
     }
 
-    private void initView() {
+    private void loadViews() {
         lvCitySaved = findViewById(R.id.lvDistrictSaved);
     }
 }
