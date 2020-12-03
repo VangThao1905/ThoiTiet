@@ -15,9 +15,9 @@ import vangthao.app.thoitiet.views.SeeWeatherByPlace;
 
 public class CityAdapter extends BaseAdapter {
 
-    private SeeWeatherByPlace context;
-    private int layout;
-    private ArrayList<CityOnlyTitleAndSolrID> cityList;
+    private final SeeWeatherByPlace context;
+    private final int layout;
+    private final ArrayList<CityOnlyTitleAndSolrID> cityList;
 
     public CityAdapter(SeeWeatherByPlace context, int layout, ArrayList<CityOnlyTitleAndSolrID> cityOnlyTitleAndSolrIDS) {
         this.context = context;
@@ -40,20 +40,20 @@ public class CityAdapter extends BaseAdapter {
         return 0;
     }
 
-    private class ViewHolder{
+    private static class ViewHolder {
         TextView txtCityNameItem;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout,null);
-            holder.txtCityNameItem    = (TextView) convertView.findViewById(R.id.txtDistrictNameItem);
+            convertView = inflater.inflate(layout, null);
+            holder.txtCityNameItem = convertView.findViewById(R.id.txtDistrictNameItem);
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.txtCityNameItem.setText(cityList.get(position).getTitle());

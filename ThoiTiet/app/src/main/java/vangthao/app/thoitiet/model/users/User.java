@@ -1,11 +1,11 @@
-package vangthao.app.thoitiet.model.weatherdata;
+package vangthao.app.thoitiet.model.users;
 
-public class UserLogin {
+public class User {
     private int id;
     private String userName;
     private String email;
 
-    public UserLogin(){
+    public User() {
 
     }
 
@@ -17,8 +17,7 @@ public class UserLogin {
         this.id = id;
     }
 
-    public UserLogin(int id, String userName, String email) {
-        this.id = id;
+    public User(String userName, String email) {
         this.userName = userName;
         this.email = email;
     }
@@ -38,4 +37,5 @@ public class UserLogin {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

@@ -1,4 +1,4 @@
-package vangthao.app.thoitiet.model;
+package vangthao.app.thoitiet.model.users;
 
 public class UserLogin {
     private int id;

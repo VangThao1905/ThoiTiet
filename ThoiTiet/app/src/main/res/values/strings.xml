@@ -2,4 +2,13 @@
     <string name="app_name">ThoiTiet</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="guest">Guest</string>
+    <string name="no_email">No Email</string>
+    <string name="login">Đăng nhập</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="forgot_password">Quên mật khẩu</string>
+    <string name="contry">Quốc gia</string>
+    <string name="max_temperature">Nhiệt độ cao nhất</string>
+    <string name="min_temperature">Nhiệt độ thấp nhất</string>
+    <string name="places_management">Quản lý địa điểm</string>
 </resources>

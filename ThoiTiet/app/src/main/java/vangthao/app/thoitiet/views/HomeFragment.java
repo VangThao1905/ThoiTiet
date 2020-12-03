@@ -1,5 +1,6 @@
 package vangthao.app.thoitiet.views;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,9 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,15 +32,13 @@ import vangthao.app.thoitiet.viewmodel.WeatherService;
 public class HomeFragment extends Fragment {
 
     private View rootView;
-    private TextView txtCountry;
     private int idCity;
     private String cityName;
-    private String countryCode = ",vn";
-    private String units = "metric";
-    private String AppID = "ae89bb1e7f56dc6ad44c4731c8154d7b";
-
-    private TextView getTxtCountry, txtTemperature, txtMinTemperature, txtMaxTemperaure, txtCityName;
+    private TextView txtCountry, txtTemperature, txtMinTemperature, txtMaxTemperaure, txtCityName;
     private ImageView imgIconWeather, imgSavePlace;
+
+    public HomeFragment() {
+    }
 
 
     @Nullable
@@ -46,13 +46,14 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         initView();
-        Intent intent = getActivity().getIntent();
+        Intent intent = Objects.requireNonNull(getActivity()).getIntent();
         cityName = intent.getStringExtra("cityname");
+        String countryCode = ",vn";
         if (cityName == null) {
             cityName = "Ha noi" + countryCode;
         } else {
             //check in city have country code of not
-            if (haveCommasInCityName(cityName) == false) {
+            if (!haveCommasInCityName(cityName)) {
                 cityName += countryCode;
             }
         }
@@ -71,33 +72,30 @@ public class HomeFragment extends Fragment {
     }
 
     private void events() {
-        imgSavePlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.txtUsernameHeader.getText().equals("Guest") && HomeActivity.txtEmailHeader.getText().equals("No Email")) {
-                    Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
-                } else {
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                    CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, cityName, txtCityName.getText().toString(), HomeActivity.txtEmailHeader.getText().toString());
-                    databaseReference.child("CITY_SAVED").push().setValue(citySaved, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                            if (error == null) {
-                                Toast.makeText(getActivity(), "Luu dia diem thanh cong!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getActivity(), "Loi luu dia diem!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+        imgSavePlace.setOnClickListener(v -> {
+            if (HomeActivity.txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && HomeActivity.txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
+                Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
+            } else {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, cityName, txtCityName.getText().toString(), HomeActivity.txtEmailHeader.getText().toString());
+                databaseReference.child("CITY_SAVED").push().setValue(citySaved, (error, ref) -> {
+                    if (error == null) {
+                        Toast.makeText(getActivity(), "Luu dia diem thanh cong!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Loi luu dia diem!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
 
     public void LoadDataWeather(String cityName) {
         WeatherService weatherService = APIWeatherUtils.getDataWeather();
-        Call<WeatherResponse> call = weatherService.getCurrentWeatherData(cityName, units, AppID);
+        String units = "metric";
+        String appId = "ae89bb1e7f56dc6ad44c4731c8154d7b";
+        Call<WeatherResponse> call = weatherService.getCurrentWeatherData(cityName, units, appId);
         call.enqueue(new Callback<WeatherResponse>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<WeatherResponse> call, @NonNull Response<WeatherResponse> response) {
                 if (response.code() == 200) {
@@ -108,17 +106,17 @@ public class HomeFragment extends Fragment {
                         double temperature = Double.parseDouble(weatherResponse.getMain().getTemp().toString());
                         String minTemperature = weatherResponse.getMain().getTempMin().toString();
                         String maxTemperature = weatherResponse.getMain().getTempMax().toString();
-                        String cityName = weatherResponse.getName();
+                        String cityNameResponse = weatherResponse.getName();
 
                         int temperatureFinal = (int) temperature;
                         //set background
                         customIconWeather(temperatureFinal);
 
-                        txtCountry.setText("Quoc gia: " + countryName);
+                        txtCountry.setText(R.string.contry + ": " + countryName);
                         txtTemperature.setText(temperatureFinal + "°C");
-                        txtMinTemperature.setText("Thap nhat: " + minTemperature + "°C");
-                        txtMaxTemperaure.setText("Cao nhat: " + maxTemperature + "°C");
-                        txtCityName.setText(cityName);
+                        txtMinTemperature.setText("Thấp nhất: " + minTemperature + "°C");
+                        txtMaxTemperaure.setText("Cao nhất: " + maxTemperature + "°C");
+                        txtCityName.setText(cityNameResponse);
                     }
                 }
             }
@@ -133,9 +131,9 @@ public class HomeFragment extends Fragment {
     public void customIconWeather(int temperature) {
         if (temperature < 15) {
             imgIconWeather.setImageResource(R.mipmap.ic_rainy);
-        } else if (temperature >= 15 && temperature <= 25) {
+        } else if (temperature <= 25) {
             imgIconWeather.setImageResource(R.mipmap.ic_cloud);
-        } else if (temperature > 25) {
+        } else {
             imgIconWeather.setImageResource(R.mipmap.ic_sunny100);
         }
     }
