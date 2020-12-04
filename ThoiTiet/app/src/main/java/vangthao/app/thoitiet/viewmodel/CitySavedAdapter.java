@@ -89,8 +89,12 @@ public class CitySavedAdapter extends BaseAdapter {
             Button btnNo = dialog.findViewById(R.id.btnNo_DeletePlace);
             CityOnlyTitleAndSolrID_Sysn cityDelete = new CityOnlyTitleAndSolrID_Sysn(cityList.get(position).getID(), cityList.get(position).getSolrId(), cityList.get(position).getTitle(), cityList.get(position).getEmail());
 
+           // Intent intent = context.getIntent();
+            //CitySavedAdapter citySavedAdapter = intent.getStringExtra("adapter_city_saved");
             btnYes.setOnClickListener(v1 -> {
-                Query query = PlacesManagement.myDatabase.child("CITY_SAVED").orderByChild("email").equalTo(HomeActivity.txtEmailHeader.getText().toString());
+                Intent intent = context.getIntent();
+                String email = intent.getStringExtra("email");
+                Query query = FirebaseDatabaseSingleton.getInstance().child("CITY_SAVED").orderByChild("email").equalTo(email);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,7 +104,6 @@ public class CitySavedAdapter extends BaseAdapter {
                             if (city.getID() == cityDelete.getID()) {
                                 phongSnapshot.getRef().removeValue();
                                 Toast.makeText(context, "Xoa dia diem thanh cong!", Toast.LENGTH_SHORT).show();
-                                PlacesManagement.adapterCitySaved.notifyDataSetChanged();
                                 dialog.dismiss();
                             }
                         }

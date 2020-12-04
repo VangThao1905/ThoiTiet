@@ -18,14 +18,6 @@ public class City {
         return ltsItem;
     }
 
-    public void setLtsItem(List<LtsItem> ltsItem) {
-        this.ltsItem = ltsItem;
-    }
-
-    public Integer getTotalDoanhNghiep() {
-        return totalDoanhNghiep;
-    }
-
     public void setTotalDoanhNghiep(Integer totalDoanhNghiep) {
         this.totalDoanhNghiep = totalDoanhNghiep;
     }

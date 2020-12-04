@@ -3,7 +3,7 @@ package vangthao.app.thoitiet.views;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,37 +34,44 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.users.SQLiteDatabasKeepLogin;
 import vangthao.app.thoitiet.model.users.User;
-import vangthao.app.thoitiet.model.users.UserLogin;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
-    public static TextView txtUsernameHeader, txtEmailHeader, txtForgotPassWord, txtSignUp;
+    private TextView txtUsernameHeader, txtEmailHeader;
     private MenuItem menuItem_Login_Logout;
     private EditText edtEmailLogin, edtPasswordLogin;
     private String emailLogin;
     private Dialog dialogLogin;
     private FirebaseAuth myAuth;
-    private SQLiteDatabasKeepLogin keepUserLogin;
-    private ArrayList<UserLogin> userLoginArrayList;
-    protected ArrayList<User> userArrayList;
+    private SharedPreferences.Editor editor;
+    private ArrayList<User> userArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setTitle("Trang chủ");
+        setTitle(R.string.home_title);
 
         loadViews();
+        loadUser();
         initValue();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
             setTitle("Trang chủ");
+
         }
+    }
+
+    public String getUsernameLogin() {
+        return txtUsernameHeader.getText().toString();
+    }
+
+    public String getEmailLogin() {
+        return txtEmailHeader.getText().toString();
     }
 
     private void initValue() {
@@ -75,20 +82,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = navigationView.getMenu();
         menuItem_Login_Logout = menu.findItem(R.id.nav_login_out);
 
-        userLoginArrayList = new ArrayList<>();
         userArrayList = new ArrayList<>();
 
         //load data user
         loadUser();
+        loadSessionData();
 
-        //create databse keep user login
-        keepUserLogin = new SQLiteDatabasKeepLogin(this, "user_login.sqlite", null, 1);
-        //create table UserLogin
-        keepUserLogin.queryData("CREATE TABLE IF NOT EXISTS UserLogin(Id INTEGER PRIMARY KEY AUTOINCREMENT,UserName VARCHAR(200),Email VARCHAR(200))");
-
-        getDataUserLogin();
-
-        //setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -98,45 +97,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        loadSessionData();
+        setTextDisplayLogin_Logout();
+    }
 
-        //kiem tra trang thai dang nhap
-        if (userLoginArrayList.size() >= 1) {
-            txtUsernameHeader.setText(userLoginArrayList.get(0).getUserName());
-            txtEmailHeader.setText(userLoginArrayList.get(0).getEmail());
-            menuItem_Login_Logout.setTitle(R.string.logout);
-            menuItem_Login_Logout.setIcon(R.drawable.ic_logout);
-        } else {
-            txtUsernameHeader.setText(R.string.guest);
-            txtEmailHeader.setText(R.string.no_email);
+    private void setTextDisplayLogin_Logout() {
+        if (txtUsernameHeader.getText().toString().equals("Guest") && txtEmailHeader.getText().toString().equals("No Email")) {
             menuItem_Login_Logout.setTitle(R.string.login);
             menuItem_Login_Logout.setIcon(R.drawable.ic_login);
-        }
-
-    }
-
-
-    private void addUserLogin(String username, String email) {
-        if (!username.equals("") && !email.equals("")) {
-            //insert data
-            keepUserLogin.queryData("INSERT INTO UserLogin VALUES(1,'" + username + "','" + email + "')");
+        } else {
+            menuItem_Login_Logout.setTitle(R.string.logout);
+            menuItem_Login_Logout.setIcon(R.drawable.ic_logout);
         }
     }
 
-    private void xoaUserLogin(final int id) {
-        keepUserLogin.queryData("DELETE FROM UserLogin WHERE Id = '" + id + "'");
-        userLoginArrayList.clear();
-    }
-
-    private void getDataUserLogin() {
-        //select data
-        Cursor dataCongViec = keepUserLogin.getData("SELECT * FROM UserLogin");
-        userLoginArrayList.clear();
-        while (dataCongViec.moveToNext()) {
-            int id = dataCongViec.getInt(0);
-            String userName = dataCongViec.getString(1);
-            String email = dataCongViec.getString(2);
-            userLoginArrayList.add(new UserLogin(id, userName, email));
-        }
+    @SuppressLint("CommitPrefEdits")
+    private void loadSessionData() {
+        SharedPreferences sharedPreferencesSaveSession = getSharedPreferences("view", 0);
+        editor = sharedPreferencesSaveSession.edit();
+        String username = sharedPreferencesSaveSession.getString("username", "Guest");
+        String email = sharedPreferencesSaveSession.getString("email", "No Email");
+        txtUsernameHeader.setText(username);
+        txtEmailHeader.setText(email);
     }
 
     private void loadViews() {
@@ -146,9 +128,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void resetDrawerHeader() {
-        getDataUserLogin();
-        xoaUserLogin(userLoginArrayList.get(0).getId());
-        userLoginArrayList.clear();
+        editor.clear();
+        editor.putString("username", "Guest");
+        editor.putString("email", "No Email");
+        editor.commit();
         txtUsernameHeader.setText(R.string.guest);
         txtEmailHeader.setText(R.string.no_email);
         menuItem_Login_Logout.setTitle(R.string.login);
@@ -168,14 +151,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     showDialogLogin();
                 } else {
                     Intent intentPlacesManagement = new Intent(HomeActivity.this, PlacesManagement.class);
+                    intentPlacesManagement.putExtra("username", txtUsernameHeader.getText().toString());
+                    intentPlacesManagement.putExtra("email", txtEmailHeader.getText().toString());
                     startActivity(intentPlacesManagement);
                 }
                 break;
             case R.id.nav_login_out:
-                if (txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
+                if (txtUsernameHeader.getText().equals("Guest") && txtEmailHeader.getText().equals("No Email")) {
                     showDialogLogin();
                 } else {
                     resetDrawerHeader();
+                    Toast.makeText(this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -188,8 +174,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_login);
         Button btnLogin = dialog.findViewById(R.id.btnLogin);
-        txtSignUp = dialog.findViewById(R.id.txtSignUp);
-        txtForgotPassWord = dialog.findViewById(R.id.txtForgotPassword);
+        TextView txtSignUp = dialog.findViewById(R.id.txtSignUp);
+        TextView txtForgotPassWord = dialog.findViewById(R.id.txtForgotPassword);
         edtEmailLogin = dialog.findViewById(R.id.edtEmailLogin);
         edtPasswordLogin = dialog.findViewById(R.id.edtPasswordLogin);
         ImageView imgViewClose = dialog.findViewById(R.id.imgViewClose);
@@ -260,6 +246,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    private void passSessionDataIntoSharedPreferences(String username, String email) {
+        editor.putString("username", username);
+        editor.putString("email", email);
+        editor.commit();
+    }
+
     private void login() {
         emailLogin = edtEmailLogin.getText().toString();
         String passwordLogin = edtPasswordLogin.getText().toString();
@@ -278,10 +270,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                     break;
                                 }
                             }
-                            //keep user login state
-                            addUserLogin(userName, emailLogin);
-                            txtUsernameHeader.setText(userName);
-                            txtEmailHeader.setText(emailLogin);
+                            passSessionDataIntoSharedPreferences(userName,emailLogin);
+                            loadSessionData();
                             menuItem_Login_Logout.setTitle(R.string.logout);
                             menuItem_Login_Logout.setIcon(R.drawable.ic_logout);
                             Toast.makeText(HomeActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
