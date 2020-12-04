@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
 
     private View rootView;
     private int idCity;
-    private String cityName;
+    private String citySolrId;
     private TextView txtCountry, txtTemperature, txtMinTemperature, txtMaxTemperaure, txtCityName;
     private ImageView imgIconWeather, imgSavePlace;
 
@@ -47,16 +47,16 @@ public class HomeFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         initView();
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
-        cityName = intent.getStringExtra("cityname");
+        citySolrId = intent.getStringExtra("citysolrid");
         String countryCode = ",vn";
-        if (cityName == null) {
-            cityName = "Ha noi" + countryCode;
+        if (citySolrId == null) {
+            citySolrId = "Ha noi" + countryCode;
         } else {
-            if (!haveCommasInCityName(cityName)) {
-                cityName += countryCode;
+            if (!haveCommasInCityName(citySolrId)) {
+                citySolrId += countryCode;
             }
         }
-        loadDataWeather(cityName);
+        loadDataWeather(citySolrId);
         loadEventList();
         return rootView;
     }
@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
             } else {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, cityName, txtCityName.getText().toString(), email);
+                CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, citySolrId, txtCityName.getText().toString(), email);
                 databaseReference.child("CITY_SAVED").push().setValue(citySaved, (error, ref) -> {
                     if (error == null) {
                         Toast.makeText(getActivity(), "Luu dia diem thanh cong!", Toast.LENGTH_SHORT).show();
