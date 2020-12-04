@@ -19,12 +19,11 @@ public class RetrofitClient {
                 .retryOnConnectionFailure(true)
                 .build();
         Gson gson = new GsonBuilder().setLenient().create();
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(builder)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        return retrofit;
     }
 
 }

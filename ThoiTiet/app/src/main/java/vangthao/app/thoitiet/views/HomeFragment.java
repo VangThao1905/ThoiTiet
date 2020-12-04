@@ -72,11 +72,15 @@ public class HomeFragment extends Fragment {
 
     private void loadEventList() {
         imgSavePlace.setOnClickListener(v -> {
-            if (HomeActivity.txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && HomeActivity.txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
+            HomeActivity homeActivity = (HomeActivity) getActivity();
+            assert homeActivity != null;
+            String username = homeActivity.getUsernameLogin();
+            String email = homeActivity.getEmailLogin();
+            if (username.equals("Guest") && email.equals("No Email")) {
                 Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
             } else {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, cityName, txtCityName.getText().toString(), HomeActivity.txtEmailHeader.getText().toString());
+                CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, cityName, txtCityName.getText().toString(), email);
                 databaseReference.child("CITY_SAVED").push().setValue(citySaved, (error, ref) -> {
                     if (error == null) {
                         Toast.makeText(getActivity(), "Luu dia diem thanh cong!", Toast.LENGTH_SHORT).show();

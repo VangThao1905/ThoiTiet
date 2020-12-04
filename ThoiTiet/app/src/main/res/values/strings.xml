@@ -11,4 +11,7 @@
     <string name="max_temperature">Nhiệt độ cao nhất</string>
     <string name="min_temperature">Nhiệt độ thấp nhất</string>
     <string name="places_management">Quản lý địa điểm</string>
+    <string name="home_title">Trang chủ</string>
+    <string name="email">email</string>
+
 </resources>

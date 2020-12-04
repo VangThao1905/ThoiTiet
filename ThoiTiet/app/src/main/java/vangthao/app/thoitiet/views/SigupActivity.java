@@ -9,11 +9,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import vangthao.app.thoitiet.R;
 import vangthao.app.thoitiet.model.users.User;
+import vangthao.app.thoitiet.viewmodel.FirebaseDatabaseSingleton;
 
 public class SigupActivity extends AppCompatActivity {
 
@@ -24,8 +23,6 @@ public class SigupActivity extends AppCompatActivity {
     private String email;
     private String password;
     private FirebaseAuth myAuth;
-
-    public static DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +67,7 @@ public class SigupActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         User user = new User(userName, email);
                         Toast.makeText(SigupActivity.this, "" + user.getUserName() + "," + user.getEmail(), Toast.LENGTH_SHORT).show();
-                        myDatabase.child("USER").push().setValue(user, (databaseError, databaseReference) -> {
+                        FirebaseDatabaseSingleton.getInstance().child("USER").push().setValue(user, (databaseError, databaseReference) -> {
                             if (!(databaseError == null)) {
                                 Toast.makeText(SigupActivity.this, "Lỗi đăng ký!", Toast.LENGTH_SHORT).show();
                             }
