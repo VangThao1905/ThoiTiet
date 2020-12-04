@@ -1,15 +1,14 @@
 package vangthao.app.thoitiet.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -21,14 +20,14 @@ import vangthao.app.thoitiet.R;
 import vangthao.app.thoitiet.model.places.City;
 import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID;
 import vangthao.app.thoitiet.viewmodel.APICityUtils;
-import vangthao.app.thoitiet.viewmodel.CityAdapter;
 import vangthao.app.thoitiet.viewmodel.CityService;
+import vangthao.app.thoitiet.viewmodel.CitysAdapter;
 
 public class SeeWeatherByPlace extends AppCompatActivity {
 
-    private ListView lvCity;
+    private RecyclerView rvCitys;
     private ArrayList<CityOnlyTitleAndSolrID> cityNameList;
-    private CityAdapter adapterCity;
+    private CitysAdapter citysAdapter;
     //List of 64 city of VietNam
     private City city;
 
@@ -44,8 +43,8 @@ public class SeeWeatherByPlace extends AppCompatActivity {
         loadViews();
         initValue();
         loadDataCity();
-        adapterCity.notifyDataSetChanged();
-        loadEventList();
+        //Toast.makeText(this, "Size:"+cityNameList.size(), Toast.LENGTH_SHORT).show();
+        //loadEventList();
     }
 
     @Override
@@ -58,8 +57,8 @@ public class SeeWeatherByPlace extends AppCompatActivity {
     }
 
     public void loadDataCity() {
-        CityService districtService = APICityUtils.getDataCity();
-        Call<City> call = districtService.getCurrentCityData();
+        CityService cityService = APICityUtils.getDataCity();
+        Call<City> call = cityService.getCurrentCityData();
         call.enqueue(new Callback<City>() {
             @Override
             public void onResponse(Call<City> call, Response<City> response) {
@@ -67,8 +66,9 @@ public class SeeWeatherByPlace extends AppCompatActivity {
                     city = response.body();
                     if (city != null) {
                         for (int i = 0; i < city.getLtsItem().size(); i++) {
-                            cityNameList.add(new CityOnlyTitleAndSolrID(city.getLtsItem().get(i).getSolrID(), city.getLtsItem().get(i).getTitle()));
-                            adapterCity.notifyDataSetChanged();
+                            CityOnlyTitleAndSolrID cityItem = new CityOnlyTitleAndSolrID(city.getLtsItem().get(i).getSolrID(), city.getLtsItem().get(i).getTitle());
+                            cityNameList.add(cityItem);
+                            citysAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -82,24 +82,30 @@ public class SeeWeatherByPlace extends AppCompatActivity {
     }
 
     private void loadEventList() {
-        lvCity.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            Intent intent = new Intent(SeeWeatherByPlace.this, HomeActivity.class);
-            String cityName = cityNameList.get(position).getSolrId().replace("-", " ");
-            StringBuilder stringBuilder = new StringBuilder(cityName);
-            stringBuilder.deleteCharAt(0);
-            cityName = stringBuilder.toString();
-            intent.putExtra("cityname", cityName);
-            startActivity(intent);
-        });
+//        lvCity.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+//            Intent intent = new Intent(SeeWeatherByPlace.this, HomeActivity.class);
+//            String cityName = cityNameList.get(position).getSolrId().replace("-", " ");
+//            StringBuilder stringBuilder = new StringBuilder(cityName);
+//            stringBuilder.deleteCharAt(0);
+//            cityName = stringBuilder.toString();
+//            intent.putExtra("cityname", cityName);
+//            startActivity(intent);
+//        });
     }
 
     private void initValue() {
-        adapterCity = new CityAdapter(SeeWeatherByPlace.this, R.layout.city_row, cityNameList);
-        lvCity.setAdapter(adapterCity);
+        cityNameList = new ArrayList<>();
+        //cityNameList.add(new CityOnlyTitleAndSolrID("ABC"));
+        citysAdapter = new CitysAdapter(cityNameList);
+
+        rvCitys.setAdapter(citysAdapter);
+        rvCitys.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        rvCitys.addItemDecoration(itemDecoration);
         // LoadDataDistrict();
     }
 
     private void loadViews() {
-        lvCity = findViewById(R.id.lvDistrict);
+        rvCitys = findViewById(R.id.rvCitys);
     }
 }
