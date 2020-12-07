@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID;
+import vangthao.app.thoitiet.model.places.City;
 import vangthao.app.thoitiet.views.HomeActivity;
 
 public class CitysAdapter extends RecyclerView.Adapter<CitysAdapter.ViewHolder> {
-    private ArrayList<CityOnlyTitleAndSolrID> cityList;
+    private ArrayList<City> cityList;
 
-    public CitysAdapter(ArrayList<CityOnlyTitleAndSolrID> cityList) {
+    public CitysAdapter(ArrayList<City> cityList) {
         this.cityList = cityList;
     }
 
@@ -37,7 +37,7 @@ public class CitysAdapter extends RecyclerView.Adapter<CitysAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CityOnlyTitleAndSolrID citys = cityList.get(position);
+        City citys = cityList.get(position);
         TextView textView = holder.txtCityName;
         textView.setText(citys.getTitle());
     }

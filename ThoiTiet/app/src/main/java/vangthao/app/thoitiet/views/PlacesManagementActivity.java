@@ -3,10 +3,12 @@ package vangthao.app.thoitiet.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,28 +19,31 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID_Sysn;
-import vangthao.app.thoitiet.viewmodel.CitySavedAdapter;
+import vangthao.app.thoitiet.model.places.City;
+import vangthao.app.thoitiet.viewmodel.CitysSavedAdapter;
 import vangthao.app.thoitiet.viewmodel.FirebaseDatabaseSingleton;
 
-public class PlacesManagement extends AppCompatActivity {
+public class PlacesManagementActivity extends AppCompatActivity {
 
-    private ListView lvCitySaved;
-    private ArrayList<CityOnlyTitleAndSolrID_Sysn> cityNameListSaved;
-    private CitySavedAdapter adapterCitySaved;
+    private RecyclerView rvCitysSaved;
+    private ArrayList<City> cityNameListSaved;
+    private CitysSavedAdapter citysAdapterSaved;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_palces_management);
-        setTitle(R.string.places_management);
+        setContentView(R.layout.activity_places_management);
+        setTitle("Quản lý địa điểm");
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         cityNameListSaved = new ArrayList<>();
+        Intent intent = getIntent();
+        email = intent.getStringExtra("email");
         loadViews();
         initValue();
         loadDataCitySaved();
-        adapterCitySaved.notifyDataSetChanged();
     }
 
     @Override
@@ -51,21 +56,18 @@ public class PlacesManagement extends AppCompatActivity {
     }
 
     public void loadDataCitySaved() {
-        Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
         DatabaseReference myData = FirebaseDatabaseSingleton.getInstance().child("CITY_SAVED");
         myData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 cityNameListSaved.clear();
-                for (DataSnapshot post : snapshot.getChildren()) {
-                    CityOnlyTitleAndSolrID_Sysn city = post.getValue(CityOnlyTitleAndSolrID_Sysn.class);
-                    assert city != null;
-                    if (city.getEmail().equals(email)) {
-                        cityNameListSaved.add(new CityOnlyTitleAndSolrID_Sysn(city.getID(), city.getSolrId(), city.getTitle(), city.getEmail()));
+                for (DataSnapshot post: snapshot.getChildren()){
+                    City city = post.getValue(City.class);
+                    if(city.getEmail().equals(email)){
+                        cityNameListSaved.add(city);
+                        citysAdapterSaved.notifyDataSetChanged();
                     }
                 }
-                adapterCitySaved.notifyDataSetChanged();
             }
 
             @Override
@@ -76,12 +78,15 @@ public class PlacesManagement extends AppCompatActivity {
     }
 
     private void initValue() {
-        adapterCitySaved = new CitySavedAdapter(PlacesManagement.this, R.layout.city_row_management, cityNameListSaved);
-        lvCitySaved.setAdapter(adapterCitySaved);
-        // LoadDataDistrict();
+        cityNameListSaved = new ArrayList<>();
+        citysAdapterSaved = new CitysSavedAdapter(cityNameListSaved);
+        rvCitysSaved.setAdapter(citysAdapterSaved);
+        rvCitysSaved.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        rvCitysSaved.addItemDecoration(itemDecoration);
     }
 
     private void loadViews() {
-        lvCitySaved = findViewById(R.id.lvDistrictSaved);
+        rvCitysSaved = findViewById(R.id.rvCitysSaved);
     }
 }

@@ -12,6 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ThoiTiet">
         <activity android:name=".views.SigupActivity" />
+        <activity android:name=".views.SeeWeatherByPlaceActivity"/>
+        <activity android:name=".views.PlacesManagementActivity"/>
         <activity
             android:name=".views.HomeActivity"
             android:launchMode="singleTop"
@@ -21,12 +23,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".views.PlacesManagement">
-
-        </activity>
-        <activity android:name=".views.SeeWeatherByPlace">
-
         </activity>
     </application>
 

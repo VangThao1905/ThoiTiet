@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import vangthao.app.thoitiet.R;
-import vangthao.app.thoitiet.model.places.CityOnlyTitleAndSolrID_Sysn;
+import vangthao.app.thoitiet.model.places.City;
 import vangthao.app.thoitiet.model.weatherdata.WeatherResponse;
 import vangthao.app.thoitiet.viewmodel.APIWeatherUtils;
 import vangthao.app.thoitiet.viewmodel.WeatherService;
@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
 
     private View rootView;
     private int idCity;
-    private String citySolrId;
+    private String citySolrId = null;
     private TextView txtCountry, txtTemperature, txtMinTemperature, txtMaxTemperaure, txtCityName;
     private ImageView imgIconWeather, imgSavePlace;
 
@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "Vui long dang nhap truoc khi luu!", Toast.LENGTH_SHORT).show();
             } else {
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-                CityOnlyTitleAndSolrID_Sysn citySaved = new CityOnlyTitleAndSolrID_Sysn(idCity, citySolrId, txtCityName.getText().toString(), email);
+                City citySaved = new City(idCity, citySolrId, txtCityName.getText().toString(), email);
                 databaseReference.child("CITY_SAVED").push().setValue(citySaved, (error, ref) -> {
                     if (error == null) {
                         Toast.makeText(getActivity(), "Luu dia diem thanh cong!", Toast.LENGTH_SHORT).show();

@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setTitle(R.string.home_title);
+        setTitle("Trang chủ");
 
         loadViews();
         loadUser();
@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
-            setTitle("Trang chủ");
+            //HomeActivity.this.setTitle("Trang chủ");
 
         }
     }
@@ -143,15 +143,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_see_weather_by_place:
-                Intent intentSeeWeatherByPlace = new Intent(HomeActivity.this, SeeWeatherByPlace.class);
+                Intent intentSeeWeatherByPlace = new Intent(HomeActivity.this, SeeWeatherByPlaceActivity.class);
                 startActivity(intentSeeWeatherByPlace);
                 break;
             case R.id.nav_placesmanagement:
-                if (txtUsernameHeader.getText().equals(String.valueOf(R.string.guest)) && txtEmailHeader.getText().equals(String.valueOf(R.string.no_email))) {
+                if (txtUsernameHeader.getText().equals("Guest") && txtEmailHeader.getText().equals("No Email")) {
                     showDialogLogin();
                 } else {
-                    Intent intentPlacesManagement = new Intent(HomeActivity.this, PlacesManagement.class);
-                    intentPlacesManagement.putExtra("username", txtUsernameHeader.getText().toString());
+                    Intent intentPlacesManagement = new Intent(HomeActivity.this, PlacesManagementActivity.class);
                     intentPlacesManagement.putExtra("email", txtEmailHeader.getText().toString());
                     startActivity(intentPlacesManagement);
                 }
@@ -161,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     showDialogLogin();
                 } else {
                     resetDrawerHeader();
-                    Toast.makeText(this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Bạn đã đăng xuất!", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -270,7 +269,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                                     break;
                                 }
                             }
-                            passSessionDataIntoSharedPreferences(userName,emailLogin);
+                            passSessionDataIntoSharedPreferences(userName, emailLogin);
                             loadSessionData();
                             menuItem_Login_Logout.setTitle(R.string.logout);
                             menuItem_Login_Logout.setIcon(R.drawable.ic_logout);

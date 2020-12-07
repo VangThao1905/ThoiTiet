@@ -66,7 +66,6 @@ public class SigupActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         User user = new User(userName, email);
-                        Toast.makeText(SigupActivity.this, "" + user.getUserName() + "," + user.getEmail(), Toast.LENGTH_SHORT).show();
                         FirebaseDatabaseSingleton.getInstance().child("USER").push().setValue(user, (databaseError, databaseReference) -> {
                             if (!(databaseError == null)) {
                                 Toast.makeText(SigupActivity.this, "Lỗi đăng ký!", Toast.LENGTH_SHORT).show();
