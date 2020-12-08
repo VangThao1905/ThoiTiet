@@ -41,11 +41,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private NavigationView navigationView;
     private TextView txtUsernameHeader, txtEmailHeader;
-    private MenuItem menuItem_Login_Logout;
+    private MenuItem menuItemLoginLogout;
     private EditText edtEmailLogin, edtPasswordLogin;
     private String emailLogin;
-    private Dialog dialogLogin;
     private FirebaseAuth myAuth;
+    private Dialog dialogLogin;
     private SharedPreferences.Editor editor;
     private ArrayList<User> userArrayList;
 
@@ -56,13 +56,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setTitle("Trang chủ");
 
         loadViews();
-        loadUser();
+        loadUsers();
         initValue();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
-            //HomeActivity.this.setTitle("Trang chủ");
-
         }
     }
 
@@ -80,12 +78,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         txtUsernameHeader = headerView.findViewById(R.id.txtUsernameHeader);
         txtEmailHeader = headerView.findViewById(R.id.txtEmailHeader);
         Menu menu = navigationView.getMenu();
-        menuItem_Login_Logout = menu.findItem(R.id.nav_login_out);
-
+        menuItemLoginLogout = menu.findItem(R.id.nav_login_out);
         userArrayList = new ArrayList<>();
 
-        //load data user
-        loadUser();
+        loadUsers();
         loadSessionData();
 
         ActionBar actionBar = getSupportActionBar();
@@ -103,11 +99,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     private void setTextDisplayLogin_Logout() {
         if (txtUsernameHeader.getText().toString().equals("Guest") && txtEmailHeader.getText().toString().equals("No Email")) {
-            menuItem_Login_Logout.setTitle(R.string.login);
-            menuItem_Login_Logout.setIcon(R.drawable.ic_login);
+            menuItemLoginLogout.setTitle(R.string.login);
+            menuItemLoginLogout.setIcon(R.drawable.ic_login);
         } else {
-            menuItem_Login_Logout.setTitle(R.string.logout);
-            menuItem_Login_Logout.setIcon(R.drawable.ic_logout);
+            menuItemLoginLogout.setTitle(R.string.logout);
+            menuItemLoginLogout.setIcon(R.drawable.ic_logout);
         }
     }
 
@@ -134,8 +130,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         editor.commit();
         txtUsernameHeader.setText(R.string.guest);
         txtEmailHeader.setText(R.string.no_email);
-        menuItem_Login_Logout.setTitle(R.string.login);
-        menuItem_Login_Logout.setIcon(R.drawable.ic_login);
+        menuItemLoginLogout.setTitle(R.string.login);
+        menuItemLoginLogout.setIcon(R.drawable.ic_login);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -169,19 +165,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void showDialogLogin() {
-        final Dialog dialog = new Dialog(HomeActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_login);
-        Button btnLogin = dialog.findViewById(R.id.btnLogin);
-        TextView txtSignUp = dialog.findViewById(R.id.txtSignUp);
-        TextView txtForgotPassWord = dialog.findViewById(R.id.txtForgotPassword);
-        edtEmailLogin = dialog.findViewById(R.id.edtEmailLogin);
-        edtPasswordLogin = dialog.findViewById(R.id.edtPasswordLogin);
-        ImageView imgViewClose = dialog.findViewById(R.id.imgViewClose);
+        dialogLogin = new Dialog(HomeActivity.this, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
+        dialogLogin.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogLogin.setContentView(R.layout.dialog_login);
+        Button btnLogin = dialogLogin.findViewById(R.id.btnLogin);
+        TextView txtSignUp = dialogLogin.findViewById(R.id.txtSignUp);
+        TextView txtForgotPassWord = dialogLogin.findViewById(R.id.txtForgotPassword);
+        edtEmailLogin = dialogLogin.findViewById(R.id.edtEmailLogin);
+        edtPasswordLogin = dialogLogin.findViewById(R.id.edtPasswordLogin);
+        ImageView imgViewClose = dialogLogin.findViewById(R.id.imgViewClose);
 
-        dialogLogin = dialog;
-
-        imgViewClose.setOnClickListener(view -> dialog.dismiss());
+        imgViewClose.setOnClickListener(view -> dialogLogin.dismiss());
 
         txtForgotPassWord.setOnClickListener(view -> {
             final Dialog dialog1 = new Dialog(HomeActivity.this);
@@ -212,7 +206,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         });
 
         btnLogin.setOnClickListener((View view) -> {
-            loadUser();
+            loadUsers();
             login();
         });
 
@@ -221,10 +215,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
         });
 
-        dialog.show();
+        dialogLogin.show();
     }
 
-    private void loadUser() {
+    private void loadUsers() {
         DatabaseReference myDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference myData = myDatabase.child("USER");
         myData.addValueEventListener(new ValueEventListener() {
@@ -260,9 +254,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             myAuth.signInWithEmailAndPassword(emailLogin, passwordLogin)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
-                            loadUser();
+                            loadUsers();
                             String userName = "";
-                            //get username
                             for (int i = 0; i < userArrayList.size(); i++) {
                                 if (userArrayList.get(i).getEmail().equals(emailLogin)) {
                                     userName = userArrayList.get(i).getUserName();
@@ -271,8 +264,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             }
                             passSessionDataIntoSharedPreferences(userName, emailLogin);
                             loadSessionData();
-                            menuItem_Login_Logout.setTitle(R.string.logout);
-                            menuItem_Login_Logout.setIcon(R.drawable.ic_logout);
+                            menuItemLoginLogout.setTitle(R.string.logout);
+                            menuItemLoginLogout.setIcon(R.drawable.ic_logout);
                             Toast.makeText(HomeActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                             dialogLogin.dismiss();
                         } else {

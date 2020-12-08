@@ -17,7 +17,7 @@ import vangthao.app.thoitiet.model.places.City;
 import vangthao.app.thoitiet.views.HomeActivity;
 
 public class CitysAdapter extends RecyclerView.Adapter<CitysAdapter.ViewHolder> {
-    private ArrayList<City> cityList;
+    private final ArrayList<City> cityList;
 
     public CitysAdapter(ArrayList<City> cityList) {
         this.cityList = cityList;
@@ -30,9 +30,7 @@ public class CitysAdapter extends RecyclerView.Adapter<CitysAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View cityView = inflater.inflate(R.layout.city_row, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(cityView, context);
-        return viewHolder;
+        return new ViewHolder(cityView);
     }
 
     @Override
@@ -48,25 +46,23 @@ public class CitysAdapter extends RecyclerView.Adapter<CitysAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private Context context;
-        private TextView txtCityName;
+        private final TextView txtCityName;
 
-        public ViewHolder(@NonNull View itemView, Context context) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.context = context;
             this.txtCityName = itemView.findViewById(R.id.txtCityNameItem);
-            txtCityName.setOnClickListener(this::onClick);
+            this.txtCityName.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(context, HomeActivity.class);
+            Intent intent = new Intent(v.getContext(), HomeActivity.class);
             String citySolrId = cityList.get(getAdapterPosition()).getSolrId().replace("-", " ");
             StringBuilder stringBuilder = new StringBuilder(citySolrId);
             stringBuilder.deleteCharAt(0);
             citySolrId = stringBuilder.toString();
             intent.putExtra("citysolrid", citySolrId);
-            context.startActivity(intent);
+            v.getContext().startActivity(intent);
         }
     }
 }

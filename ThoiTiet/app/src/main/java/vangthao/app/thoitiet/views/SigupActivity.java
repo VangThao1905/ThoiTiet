@@ -32,7 +32,6 @@ public class SigupActivity extends AppCompatActivity {
         loadViews();
         intitValue();
         loadEventList();
-
     }
 
     private void loadEventList() {
@@ -58,7 +57,6 @@ public class SigupActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin đăng ký!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void addUser() {

@@ -26,9 +26,6 @@ public class City {
         this.email = email;
     }
 
-    public City(City districtOnlyTitleAndSolrID_sys) {
-    }
-
     public String getEmail() {
         return email;
     }
@@ -37,7 +34,7 @@ public class City {
         this.email = email;
     }
 
-    public City(){
+    public City() {
 
     }
 

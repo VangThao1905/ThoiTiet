@@ -17,6 +17,9 @@ public class LtsItem {
     @SerializedName("Title")
     @Expose
     private String title;
+
+    public LtsItem() {
+    }
     @SerializedName("STT")
     @Expose
     private Integer sTT;

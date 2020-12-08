@@ -63,6 +63,7 @@ public class PlacesManagementActivity extends AppCompatActivity {
                 cityNameListSaved.clear();
                 for (DataSnapshot post: snapshot.getChildren()){
                     City city = post.getValue(City.class);
+                    assert city != null;
                     if(city.getEmail().equals(email)){
                         cityNameListSaved.add(city);
                         citysAdapterSaved.notifyDataSetChanged();
