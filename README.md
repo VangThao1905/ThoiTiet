@@ -12,7 +12,7 @@ II. Technologies
 1. Programming Language Used
   - Java
 2. Database
-  - Firebase, SQLite
+  - Firebase
 3. API
   - Open Weather Map API
 4. Library
